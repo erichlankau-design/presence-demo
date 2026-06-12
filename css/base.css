@@ -5,7 +5,7 @@ button, select { touch-action: manipulation; }
 body { overscroll-behavior: none; }
 body {
   font-family: var(--font-body);
-  color: var(--ink);
+  color: var(--text-1);
   background: #14121f radial-gradient(1200px 700px at 70% -10%, #2c2747 0%, #14121f 60%);
   min-height: 100vh;
   display: flex;
@@ -34,7 +34,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 }
 .seg { display: flex; background: #262238; border: 1px solid #3a3553; border-radius: 9px; overflow: hidden; }
 .seg button { padding: 5px 10px; font-size: 12px; color: #9d96c7; }
-.seg button.on { background: var(--teal-strong); color: white; }
+.seg button.on { background: var(--accent-strong); color: white; }
 .seg button:disabled { opacity: 0.55; cursor: default; }
 .stage-clock {
   font-variant-numeric: tabular-nums; font-size: 15px; font-weight: 600;
@@ -73,23 +73,30 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   flex: 0 0 auto;
   display: flex; justify-content: space-around; align-items: center;
   padding: 8px 10px 4px;
-  background: rgba(255,255,255,0.75);
+  background: var(--bar);
   backdrop-filter: blur(14px);
-  border-top: 1px solid rgba(31,41,55,0.06);
+  border-top: 1px solid var(--line);
 }
 #tabbar button {
   display: flex; flex-direction: column; align-items: center; gap: 2px;
-  font-size: 10.5px; color: var(--muted); padding: 4px 12px; border-radius: 12px;
+  font-size: 10.5px; color: var(--text-3); padding: 4px 12px; border-radius: 12px;
 }
 #tabbar button .tab-ico { font-size: 17px; line-height: 1; }
-#tabbar button.on { color: var(--teal); font-weight: 600; }
-.homebar { flex: 0 0 auto; height: 18px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.75); }
-.homebar::after { content: ""; width: 120px; height: 5px; border-radius: 3px; background: rgba(31,41,55,0.35); }
+#tabbar button.on { color: var(--accent); font-weight: 600; }
+.homebar { flex: 0 0 auto; height: 18px; display: flex; align-items: center; justify-content: center; background: var(--bar); }
+.homebar::after { content: ""; width: 120px; height: 5px; border-radius: 3px; background: var(--fill-2); }
 
 .stage-hint { margin-top: 14px; font-size: 12px; color: #6f6996; text-align: center; }
 
 /* Screens generisch */
-.screen { animation: screen-in 240ms ease; }
+.screen { animation: screen-in 300ms var(--ease-out); }
+.screen:not(.noanim) > * { animation: rise 350ms var(--ease-out) backwards; }
+.screen:not(.noanim) > *:nth-child(2) { animation-delay: 45ms; }
+.screen:not(.noanim) > *:nth-child(3) { animation-delay: 90ms; }
+.screen:not(.noanim) > *:nth-child(4) { animation-delay: 135ms; }
+.screen:not(.noanim) > *:nth-child(5) { animation-delay: 180ms; }
+.screen:not(.noanim) > *:nth-child(n+6) { animation-delay: 225ms; }
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } }
 .screen.noanim { animation: none; }
 @keyframes screen-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
@@ -98,7 +105,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   display: none;
   position: fixed; right: 14px; bottom: calc(86px + env(safe-area-inset-bottom)); z-index: 60;
   width: 46px; height: 46px; border-radius: 50%;
-  background: rgba(31,41,55,0.82); color: white; font-size: 20px;
+  background: var(--accent); color: white; font-size: 20px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.35);
   backdrop-filter: blur(8px);
   align-items: center; justify-content: center;
@@ -118,4 +125,24 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   #regie-fab { display: flex; }
   #toasts { top: calc(14px + env(safe-area-inset-top)); width: calc(100vw - 24px); }
   .toast { max-width: 100%; }
+}
+
+/* Radar-Puls (Hero-Moment) + Safety-Net für reduzierte Bewegung */
+.radar-me .ava-ring::before {
+  content: ""; position: absolute; inset: -4px; border-radius: 50%;
+  border: 2px solid var(--accent);
+  animation: radar-pulse 2.4s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes radar-pulse {
+  from { transform: scale(1); opacity: 0.5; }
+  to { transform: scale(1.8); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .radar-me .ava-ring::before { display: none; }
 }

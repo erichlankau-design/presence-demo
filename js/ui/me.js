@@ -3,6 +3,7 @@ import { S, setS, visiblePresence } from '../state.js';
 import { MODES } from '../data.js';
 import { avatarHTML } from './dashboard.js';
 import { closeSheet } from './presence.js';
+import { icon } from './icons.js';
 
 export function renderMe(el) {
   const st = S();
@@ -43,28 +44,28 @@ export function renderMe(el) {
           <span class="grow" style="text-align:left">
             <div style="font-weight:700; font-size:14.5px">Safety-Center</div>
             <div class="tiny">Lautloser Austritt · Schutz vor Kontrolle · Hilfe-Nummern</div>
-          </span><span class="chev" style="color:var(--muted)">›</span>
+          </span><span class="chev">${icon('chevR', 16)}</span>
         </button>
         <button class="row" style="width:100%" data-sheet="engine">
           <span style="font-size:22px">✦</span>
           <span class="grow" style="text-align:left">
             <div style="font-weight:700; font-size:14.5px">Was die Rhythm Engine weiß</div>
             <div class="tiny">KI-Kennzeichnung · on-device · max. 2 Vorschläge am Tag</div>
-          </span><span class="chev" style="color:var(--muted)">›</span>
+          </span><span class="chev">${icon('chevR', 16)}</span>
         </button>
         <button class="row" style="width:100%" data-nav="widget">
           <span style="font-size:22px">📱</span>
           <span class="grow" style="text-align:left">
             <div style="font-weight:700; font-size:14.5px">Widget-Vorschau</div>
             <div class="tiny">Dein Kreis auf dem Homescreen — ohne die App zu öffnen</div>
-          </span><span class="chev" style="color:var(--muted)">›</span>
+          </span><span class="chev">${icon('chevR', 16)}</span>
         </button>
         <button class="row" style="width:100%" data-nav="onboarding">
           <span style="font-size:22px">🌱</span>
           <span class="grow" style="text-align:left">
             <div style="font-weight:700; font-size:14.5px">Onboarding ansehen</div>
             <div class="tiny">Der Einstieg neuer Nutzer:innen — inkl. 16+-Check</div>
-          </span><span class="chev" style="color:var(--muted)">›</span>
+          </span><span class="chev">${icon('chevR', 16)}</span>
         </button>
       </div>
 

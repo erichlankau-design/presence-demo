@@ -13,6 +13,15 @@ import { openMemberSheet } from './ui/member.js';
 import { toast } from './ui/toast.js';
 import { butlerAccept, butlerDismiss } from './butler.js';
 import { startSim, loadScenario, setSpeed, restartScenario } from './sim.js';
+import { icon } from './ui/icons.js';
+
+// UI-Chrome: Lucide-Icons statt Glyphen (DESIGN.md: Emoji nur als Nutzer-Ausdruck)
+const TAB_ICONS = { dashboard: 'radar', moments: 'sparkles', vault: 'vault', me: 'user' };
+document.querySelectorAll('#tabbar button').forEach(b => {
+  const el = b.querySelector('.tab-ico');
+  if (el) el.innerHTML = icon(TAB_ICONS[b.dataset.tab] || 'radar', 22);
+});
+document.getElementById('regie-fab').innerHTML = icon('sliders', 22);
 
 const app = document.getElementById('app');
 const sheets = { presence: openPresenceSheet, circles: openCirclesSheet, safety: openSafetySheet, engine: openEngineSheet };

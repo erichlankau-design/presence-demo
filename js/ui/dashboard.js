@@ -2,6 +2,7 @@
 import { S, visiblePresence, fmtLeft } from '../state.js';
 import { PEOPLE, MODES, ENERGIES } from '../data.js';
 import { butlerCardsHTML } from '../butler.js';
+import { icon } from './icons.js';
 
 const modeById = id => MODES.find(m => m.id === id);
 
@@ -81,10 +82,10 @@ export function renderDashboard(el) {
             <div class="h-display h2">${circle.name}</div>
             <div class="tiny">${presentCount} von ${circle.members.length} gerade da</div>
           </span>
-          <span class="chev">▼</span>
+          <span class="chev">${icon('chevD', 15)}</span>
         </button>
         <span class="glut ${glutLow ? 'low' : ''}" title="Glut des Kreises — erlischt nie, jede:r kann sie neu entfachen">
-          <span class="flame">🔥</span> ${circle.glut} · von ${circle.glutBy}
+          <span class="flame">${icon('flame', 13)}</span> ${circle.glut} · von ${circle.glutBy}
         </span>
       </div>
 
@@ -106,7 +107,7 @@ export function renderDashboard(el) {
             <div style="font-weight:700; font-size:14.5px">${myMode ? myMode.label + ' · ' + myEnergy.short : 'Kein Signal gesetzt'}</div>
             <div class="pc-timer" ${myVisible ? `data-left="${myP.until}" data-suffix=" · läuft automatisch ab"` : ''}>${myVisible ? fmtLeft(myP.until) + ' · läuft automatisch ab' : 'Ein Tap, und dein Kreis weiß, woran er ist'}</div>
           </span>
-          <span class="chev" style="color:var(--muted)">›</span>
+          <span class="chev">${icon('chevR', 17)}</span>
         </button>
       </div>
 

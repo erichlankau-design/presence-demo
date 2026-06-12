@@ -2,6 +2,7 @@
 // Das Investoren-Visual für „Widget-first“ (Masterplan Kap. 4.5).
 import { S, visiblePresence } from '../state.js';
 import { PEOPLE } from '../data.js';
+import { icon } from './icons.js';
 
 const DUMMIES = ['📷', '🎧', '💬', '🗺️', '📅', '☁️', '🏦', '🍿'];
 
@@ -38,7 +39,7 @@ export function renderWidget(el) {
         <div class="pwidget">
           <div style="display:flex; justify-content:space-between; align-items:center">
             <span style="font-weight:700; font-size:13px">${c.emoji} ${c.name}</span>
-            <span class="glut ${c.glut < 35 ? 'low' : ''}" style="padding:3px 9px; font-size:11px"><span class="flame" style="font-size:12px">🔥</span>${c.glut}</span>
+            <span class="glut ${c.glut < 35 ? 'low' : ''}" style="padding:3px 9px; font-size:11px"><span class="flame">${icon('flame', 11)}</span>${c.glut}</span>
           </div>
           <div class="wminis">${minis}</div>
           <div class="tiny" style="margin-top:6px">${present.length ? present.length + ' gerade da — tippen zum Andocken' : 'Gerade ist Ruhe — auch schön.'}</div>

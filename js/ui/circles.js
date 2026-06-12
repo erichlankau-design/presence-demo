@@ -2,6 +2,7 @@
 import { S, setS, visiblePresence } from '../state.js';
 import { toast } from './toast.js';
 import { closeSheet } from './presence.js';
+import { icon } from './icons.js';
 
 export function openCirclesSheet() {
   const root = document.getElementById('sheet-root');
@@ -14,9 +15,9 @@ export function openCirclesSheet() {
         <span style="font-size:26px">${c.emoji}</span>
         <span class="grow" style="text-align:left">
           <div style="font-weight:700; font-size:15px">${c.name}</div>
-          <div class="tiny">${present} von ${c.members.length} gerade da · 🔥 ${c.glut}</div>
+          <div class="tiny">${present} von ${c.members.length} gerade da · ${icon('flame', 11)} ${c.glut}</div>
         </span>
-        ${active ? '<span class="chip" style="background:rgba(15,118,110,0.10); color:var(--teal)">Aktiv</span>' : '<span class="chev" style="color:var(--muted)">›</span>'}
+        ${active ? '<span class="chip" style="background:var(--accent-fill); color:var(--accent)">Aktiv</span>' : `<span class="chev">${icon('chevR', 16)}</span>`}
       </button>`;
   }).join('');
 

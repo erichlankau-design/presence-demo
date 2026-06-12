@@ -63,7 +63,7 @@ export function openMemberSheet(personId) {
           <div class="tiny">${vp ? mode.emoji + ' ' + mode.label + ' · ' + energy.label : 'Gerade kein Signal — das ist okay'}</div>
         </span>
       </div>
-      ${vp && vp.energy === 'e4' ? `<div class="tiny" style="margin:4px 0 8px; color:#9D2463">💛 ${p.name} könnte gerade jemanden brauchen — dein Zeichen zählt doppelt.</div>` : ''}
+      ${vp && vp.energy === 'e4' ? `<div class="tiny" style="margin:4px 0 8px; color:var(--sos-text)">💛 ${p.name} könnte gerade jemanden brauchen — dein Zeichen zählt doppelt.</div>` : ''}
       ${body}
       <p class="tiny" style="text-align:center; margin-top:14px; line-height:1.6">
         Kein Chat hier — fürs Reden habt ihr eure echten Kanäle.<br>
