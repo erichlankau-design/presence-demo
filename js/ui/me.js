@@ -39,6 +39,17 @@ export function renderMe(el) {
       </div>
 
       <div class="card" style="margin-top:12px">
+        <div class="row" style="border:none">
+          <span style="font-size:22px">🌙</span>
+          <span class="grow">
+            <div style="font-weight:700; font-size:14.5px">Dunkler Modus</div>
+            <div class="tiny">Standard — moodiger. Hell ist optional.</div>
+          </span>
+          <button class="toggle ${document.documentElement.dataset.theme === 'light' ? '' : 'on'}" data-theme-toggle aria-label="Hell/Dunkel umschalten"><i></i></button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
         <button class="row" style="border:none; width:100%" data-sheet="safety">
           <span style="font-size:22px">🛟</span>
           <span class="grow" style="text-align:left">

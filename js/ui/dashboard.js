@@ -2,6 +2,7 @@
 import { S, visiblePresence, fmtLeft } from '../state.js';
 import { PEOPLE, MODES, ENERGIES, DORMANT } from '../data.js';
 import { butlerCardsHTML } from '../butler.js';
+import { funkeCardHTML } from './funke.js';
 import { icon } from './icons.js';
 
 const modeById = id => MODES.find(m => m.id === id);
@@ -125,6 +126,8 @@ export function renderDashboard(el) {
           <span class="flame">${icon('flame', 13)}</span> ${circle.glut} · von ${circle.glutBy}
         </span>
       </div>
+
+      ${funkeCardHTML()}
 
       <div class="card">
         <div class="sub" style="display:flex; justify-content:space-between">

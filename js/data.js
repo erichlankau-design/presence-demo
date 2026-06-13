@@ -85,6 +85,9 @@ export function seed() {
       tom:   { mode: null,        energy: null, until: 0 },
     },
     dormantPinged: [],        // ids aus DORMANT, denen ein Reaktivierungs-Zeichen gesendet wurde
+    // „Der Funke": tägliches, druckfreies Synchron-Ritual (AP11). active=läuft, until=Fensterende,
+    // here=wer „bin da" getippt hat, firedToday=schon ausgelöst (kein Spam), expired=verglüht (folgenlos).
+    funke: { active: false, until: 0, here: [], firedToday: false, expired: false },
     invisible: {},            // personId -> true (AP4: nicht detektierbar — wirkt wie abgelaufen)
     moments: [
       { id: 'm1', circle: 'gym', title: 'Feierabend-Pump um 18:30?', by: 'lisa', ttlUntil: 90, joined: ['lisa', 'max'], echo: null },

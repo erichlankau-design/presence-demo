@@ -2,6 +2,7 @@
 // Szenarien sind Event-Listen [{at: clockMinute, run}] auf frischem Preset.
 import { S, setS, resetDemo } from './state.js';
 import { suggest } from './butler.js';
+import { fireFunke } from './ui/funke.js';
 import { toast } from './ui/toast.js';
 
 let timer = null;
@@ -34,6 +35,7 @@ const SCENARIOS = {
       { at: 40, run: st => patchPresence('mara', P('sofa', 'e0', st.clock + 240)) },
       { at: 70, run: () => suggest('duo', 'Ihr seid beide im Sofa-Modus — Lust auf einen Abendspaziergang?', { title: 'Abendspaziergang', joined: ['lisa'], ttl: 60 }) },
       { at: 8,  run: () => toast('💭 Lisa denkt an dich.') },
+      { at: 4,  run: () => fireFunke() }, // tägliches Ritual zur gelernten guten Zeit
     ],
   },
   gymtag: {

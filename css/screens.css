@@ -210,3 +210,31 @@
   color: #fff; font-weight: 700; font-size: 13px;
 }
 .revive-sent { font-size: 12px; font-weight: 600; color: var(--ok-text); }
+
+/* ---- „Der Funke" (AP11): tägliches Synchron-Ritual ---- */
+.funke-card {
+  margin-top: 12px; padding: 16px; border-radius: var(--r-card);
+  background:
+    radial-gradient(120% 80% at 50% -20%, color-mix(in srgb, var(--ember1) 30%, transparent) 0%, transparent 60%),
+    linear-gradient(135deg, color-mix(in srgb, var(--ember2) 22%, transparent), color-mix(in srgb, var(--accent) 16%, transparent));
+  border: 1.5px solid var(--ember-line);
+  box-shadow: 0 0 28px color-mix(in srgb, var(--ember2) 22%, transparent), var(--shadow-soft);
+  animation: funke-in 420ms var(--ease-out);
+}
+@keyframes funke-in { from { opacity: 0; transform: translateY(8px) scale(0.98); } }
+.funke-top { display: flex; align-items: center; gap: 12px; }
+.funke-flame { font-size: 26px; filter: drop-shadow(0 0 8px color-mix(in srgb, var(--ember2) 70%, transparent)); animation: funke-flicker 2.4s ease-in-out infinite; }
+@keyframes funke-flicker { 0%,100% { transform: scale(1) rotate(-2deg); } 50% { transform: scale(1.12) rotate(2deg); } }
+.funke-title { font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--text-1); }
+.funke-sub { font-size: 12px; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.funke-faces { display: flex; gap: 8px; margin-top: 12px; min-height: 34px; align-items: center; flex-wrap: wrap; }
+.funke-face {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: 12px;
+  border: 2px solid color-mix(in srgb, var(--ember1) 60%, transparent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--ember2) 40%, transparent);
+}
+.funke-join { margin-top: 12px; background: linear-gradient(135deg, var(--ember2), var(--ember1)); box-shadow: 0 8px 22px color-mix(in srgb, var(--ember2) 40%, transparent); }
+.funke-joined { margin-top: 12px; padding: 11px; border-radius: 14px; text-align: center; font-weight: 600; font-size: 13.5px; color: var(--ember-text); background: var(--ember-fill); border: 1px solid var(--ember-line); }
+.funke-foot { margin-top: 8px; text-align: center; font-size: 11px; color: var(--text-3); }

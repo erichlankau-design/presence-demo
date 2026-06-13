@@ -85,9 +85,8 @@
   --sos-text: #F9A8D4;
 }
 
-/* ---- LIGHT (Auto via System-Einstellung) ---- */
-@media (prefers-color-scheme: light) {
-  :root {
+/* ---- LIGHT (nur explizit via Toggle; Dark ist Standard) ---- */
+html[data-theme="light"] {
     --bg-0: #F7F6FB;
     --bg-1: #EFEDF6;
     --card-solid: #FFFFFF;
@@ -135,5 +134,4 @@
     --ok-line: rgba(22, 163, 74, 0.30);
     --ok-text: #065F46;
     --sos-text: #9D2463;
-  }
 }

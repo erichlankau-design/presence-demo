@@ -10,11 +10,22 @@ import { renderOnboarding, onboardingAction, onboardingCopy, onboardingExit } fr
 import { openPresenceSheet } from './ui/presence.js';
 import { openCirclesSheet } from './ui/circles.js';
 import { openMemberSheet } from './ui/member.js';
+import { fireFunke, joinFunke, maybeExpireFunke } from './ui/funke.js';
 import { toast } from './ui/toast.js';
 import { butlerAccept, butlerDismiss } from './butler.js';
 import { startSim, loadScenario, setSpeed, restartScenario } from './sim.js';
 import { icon } from './ui/icons.js';
 import { DORMANT } from './data.js';
+
+// Theme: Dark ist Standard (moodier). Hell nur, wenn explizit gewählt & persistiert.
+const savedTheme = (() => { try { return localStorage.getItem('presence-theme'); } catch (e) { return null; } })();
+if (savedTheme === 'light') document.documentElement.dataset.theme = 'light';
+export function toggleTheme() {
+  const light = document.documentElement.dataset.theme === 'light';
+  if (light) { delete document.documentElement.dataset.theme; try { localStorage.setItem('presence-theme', 'dark'); } catch (e) {} }
+  else { document.documentElement.dataset.theme = 'light'; try { localStorage.setItem('presence-theme', 'light'); } catch (e) {} }
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', light ? '#0B0D12' : '#F7F6FB');
+}
 
 // UI-Chrome: Lucide-Icons statt Glyphen (DESIGN.md: Emoji nur als Nutzer-Ausdruck)
 const TAB_ICONS = { dashboard: 'radar', moments: 'sparkles', vault: 'vault', me: 'user' };
@@ -48,7 +59,8 @@ function computeSig() {
   const b = st.butler.map(x => x.id).join(',');
   const c = Object.values(st.circles).map(x => x.id + Math.round(x.glut / 5) + x.xp + x.vault.length).join(',');
   const d = (st.dormantPinged || []).length;
-  return [current, st.meta.activeCircle, st.scenario, st.invisible.me ? 1 : 0, p, m, b, c, d].join('|');
+  const f = st.funke.active ? 'F' + st.funke.here.length + (st.funke.until > st.clock ? 'a' : 'x') : '-';
+  return [current, st.meta.activeCircle, st.scenario, st.invisible.me ? 1 : 0, p, m, b, c, d, f].join('|');
 }
 
 export function nav(name) {
@@ -127,6 +139,7 @@ app.addEventListener('click', e => {
   const join = find('data-join');      if (join) return joinMoment(join);
   const echo = find('data-echo');      if (echo) return echoMoment(echo);
   if (e.target.closest('[data-habzeit]')) return setHabZeit();
+  if (e.target.closest('[data-funke-join]')) return joinFunke();
   const revive = find('data-revive');  if (revive) return reviveDormant(revive);
   const ok = find('data-butler-ok');
   if (ok) {
@@ -135,6 +148,7 @@ app.addEventListener('click', e => {
     return;
   }
   const no = find('data-butler-no');   if (no) return butlerDismiss(no);
+  if (e.target.closest('[data-theme-toggle]')) { toggleTheme(); render(); return; }
   if (e.target.closest('[data-toggle-invisible]')) {
     const st = S();
     const on = !st.invisible.me;
@@ -197,9 +211,11 @@ function openRegieSheet() {
       <div class="dur-row">
         ${[1, 10, 60].map(n => `<button class="dur-pill ${st.speed === n ? 'on' : ''}" data-rspeed="${n}">${n}×</button>`).join('')}
       </div>
-      <button class="btn ghost" data-rreset style="margin-top:16px">↺ Szenario neu starten</button>
+      <button class="btn" data-rfunke style="margin-top:16px">🔥 Funke auslösen</button>
+      <button class="btn ghost" data-rreset style="margin-top:8px">↺ Szenario neu starten</button>
     </div>`;
   root.querySelector('[data-rclose]').addEventListener('click', () => { root.innerHTML = ''; });
+  root.querySelector('[data-rfunke]').addEventListener('click', () => { fireFunke(); root.innerHTML = ''; nav('dashboard'); });
   root.querySelectorAll('[data-rscen]').forEach(b => b.addEventListener('click', () => {
     loadScenario(b.dataset.rscen);
     document.getElementById('ctl-scenario').value = b.dataset.rscen;
@@ -226,6 +242,7 @@ function syncStageClock() {
 }
 
 sub(() => {
+  maybeExpireFunke(); // Fenster verglüht still, sobald die Zeit abläuft
   if (computeSig() !== lastSig) {
     render();
   } else {
