@@ -14,6 +14,7 @@ import { toast } from './ui/toast.js';
 import { butlerAccept, butlerDismiss } from './butler.js';
 import { startSim, loadScenario, setSpeed, restartScenario } from './sim.js';
 import { icon } from './ui/icons.js';
+import { DORMANT } from './data.js';
 
 // UI-Chrome: Lucide-Icons statt Glyphen (DESIGN.md: Emoji nur als Nutzer-Ausdruck)
 const TAB_ICONS = { dashboard: 'radar', moments: 'sparkles', vault: 'vault', me: 'user' };
@@ -46,7 +47,8 @@ function computeSig() {
   const m = st.moments.map(x => x.id + x.joined.length + (x.ttlUntil > st.clock ? 'a' : 'x') + (x.echo ? 'e' : '')).join(',');
   const b = st.butler.map(x => x.id).join(',');
   const c = Object.values(st.circles).map(x => x.id + Math.round(x.glut / 5) + x.xp + x.vault.length).join(',');
-  return [current, st.meta.activeCircle, st.scenario, st.invisible.me ? 1 : 0, p, m, b, c].join('|');
+  const d = (st.dormantPinged || []).length;
+  return [current, st.meta.activeCircle, st.scenario, st.invisible.me ? 1 : 0, p, m, b, c, d].join('|');
 }
 
 export function nav(name) {
@@ -97,6 +99,25 @@ function echoMoment(id) {
   toast('Als Erinnerung im Vault gespeichert. ✦');
 }
 
+// „Hab Zeit“: ein Tap setzt den offenen, druckfreien Verfügbarkeits-Status (Energie e0).
+function setHabZeit() {
+  const st = S();
+  const cur = visiblePresence('me');
+  const mode = (cur && cur.mode) || st.presence.me.mode || 'eigene';
+  setS({ presence: { ...st.presence, me: { mode, energy: 'e0', until: st.clock + 180 } } });
+  reignite(st.meta.activeCircle, 'Erik', 3, 6);
+  toast('Du hast Zeit — dein Kreis sieht es. Kein Druck, keine Verzweiflung.');
+}
+
+// Reaktivierung: ein Zeichen an einen schlafenden Kontakt, ohne Überwindung.
+function reviveDormant(id) {
+  const st = S();
+  if ((st.dormantPinged || []).includes(id)) return;
+  const d = DORMANT.find(x => x.id === id);
+  setS({ dormantPinged: [...(st.dormantPinged || []), id] });
+  toast('👋 Zeichen an ' + (d ? d.name : 'deinen Kontakt') + ' ist unterwegs — erreich deine Leute, ohne Überwindung.');
+}
+
 app.addEventListener('click', e => {
   const find = attr => { const el = e.target.closest('[' + attr + ']'); return el && el.getAttribute(attr); };
   const person = find('data-person');
@@ -105,6 +126,8 @@ app.addEventListener('click', e => {
   const sheet = find('data-sheet');    if (sheet && sheets[sheet]) return sheets[sheet]();
   const join = find('data-join');      if (join) return joinMoment(join);
   const echo = find('data-echo');      if (echo) return echoMoment(echo);
+  if (e.target.closest('[data-habzeit]')) return setHabZeit();
+  const revive = find('data-revive');  if (revive) return reviveDormant(revive);
   const ok = find('data-butler-ok');
   if (ok) {
     const m = butlerAccept(ok);

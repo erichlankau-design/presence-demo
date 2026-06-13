@@ -1,10 +1,47 @@
 // Kreis-Dashboard: Energy Radar (Menschen im Zentrum), Glut, Momente-Vorschau, Level dezent.
 import { S, visiblePresence, fmtLeft } from '../state.js';
-import { PEOPLE, MODES, ENERGIES } from '../data.js';
+import { PEOPLE, MODES, ENERGIES, DORMANT } from '../data.js';
 import { butlerCardsHTML } from '../butler.js';
 import { icon } from './icons.js';
 
 const modeById = id => MODES.find(m => m.id === id);
+
+// „Hab Zeit – Bock was zu machen?“ — der entstigmatisierte Verfügbarkeits-Status (Audit Kap. 4).
+function habZeitHTML() {
+  const open = visiblePresence('me')?.energy === 'e0';
+  return `
+    <button class="habzeit-cta ${open ? 'on' : ''}" data-habzeit>
+      <span class="hz-emoji">${open ? '🙌' : '⏱️'}</span>
+      <span class="hz-label">${open
+        ? 'Du hast Zeit — dein Kreis sieht es. Kein Druck.'
+        : 'Hab Zeit – Bock was zu machen?'}</span>
+    </button>`;
+}
+
+// Reaktivierung: „erreiche deine Leute, ohne Überwindung“ (Audit Kap. 1.3).
+function reviveHTML() {
+  const pinged = S().dormantPinged || [];
+  const rows = DORMANT.map(d => {
+    const sent = pinged.includes(d.id);
+    return `
+      <div class="row revive-row">
+        <span class="revive-ava" style="background:${d.color}">${d.name.slice(0, 2)}</span>
+        <span class="grow">
+          <div style="font-weight:600; font-size:13.5px">${d.name}</div>
+          <div class="tiny">${d.since}</div>
+        </span>
+        ${sent
+          ? '<span class="revive-sent">Zeichen unterwegs ✓</span>'
+          : `<button class="btn small ghost" data-revive="${d.id}">👋 Mal wieder?</button>`}
+      </div>`;
+  }).join('');
+  return `
+    <div class="card" style="margin-top:12px">
+      <div class="sub" style="margin-bottom:4px"><b>Wen hast du länger nicht gesehen?</b></div>
+      <div class="tiny" style="margin-bottom:6px">Ein Zeichen genügt — niemand sieht, ob jemand antwortet.</div>
+      ${rows}
+    </div>`;
+}
 
 export function avatarHTML(personId, opts = {}) {
   const person = PEOPLE[personId];
@@ -109,7 +146,10 @@ export function renderDashboard(el) {
           </span>
           <span class="chev">${icon('chevR', 17)}</span>
         </button>
+        ${habZeitHTML()}
       </div>
+
+      ${reviveHTML()}
 
       <div class="card" style="margin-top:12px">
         <div class="sub" style="display:flex; justify-content:space-between; margin-bottom:8px">

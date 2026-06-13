@@ -185,3 +185,28 @@
     padding-bottom: calc(26px + env(safe-area-inset-bottom));
   }
 }
+
+/* ---- „Hab Zeit“-Quick-Action (AP10) ---- */
+.habzeit-cta {
+  display: flex; align-items: center; gap: 10px; width: 100%; margin-top: 10px;
+  padding: 13px 16px; border-radius: var(--r-md);
+  background: linear-gradient(135deg, var(--accent-fill), var(--accent2-fill));
+  border: 1.5px solid var(--accent-line); color: var(--text-1);
+  font-weight: 700; font-size: 14.5px; text-align: left;
+  transition: transform 120ms var(--ease-spring);
+}
+.habzeit-cta:active { transform: scale(0.98); }
+.habzeit-cta .hz-emoji { font-size: 20px; flex: 0 0 auto; }
+.habzeit-cta.on {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--e0) 22%, transparent), var(--accent2-fill));
+  border-color: color-mix(in srgb, var(--e0) 45%, transparent);
+}
+
+/* ---- Reaktivierungs-Karte ---- */
+.revive-row { gap: 12px; }
+.revive-ava {
+  width: 38px; height: 38px; border-radius: 50%; flex: 0 0 auto;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: 13px;
+}
+.revive-sent { font-size: 12px; font-weight: 600; color: var(--ok-text); }

@@ -12,7 +12,7 @@ export const MODES = [
 ];
 
 export const ENERGIES = [
-  { id: 'e0', label: 'Offen für alles',        short: 'Offen',        hint: 'Komm vorbei, ruf an, alles gut' },
+  { id: 'e0', label: 'Hab Zeit – Bock was zu machen?', short: 'Hab Zeit', hint: 'Offen für alles — komm vorbei, ruf an' },
   { id: 'e1', label: 'Quatschen ja, Pläne nein', short: 'Quatschen',  hint: 'Locker schreiben ist willkommen' },
   { id: 'e2', label: 'Nur Reaktionen',          short: 'Reaktionen',  hint: 'Daumen & Herzen, kein Talk' },
   { id: 'e3', label: 'Bitte nicht stören',      short: 'Nicht stören',hint: 'Bin da, aber für mich' },
@@ -28,6 +28,14 @@ export const PEOPLE = {
   mara:  { id: 'mara',  name: 'Mara',  color: '#10B981' },
   tom:   { id: 'tom',   name: 'Tom',   color: '#6366F1' },
 };
+
+// Lose/schlafende Kontakte: Leute, die man mag, aber aus den Augen verloren hat.
+// Kern des „erreiche deine Leute, ohne Überwindung"-Gedankens (Audit Kap. 1.3).
+export const DORMANT = [
+  { id: 'ben',  name: 'Ben',  color: '#14B8A6', since: 'seit ~3 Monaten still' },
+  { id: 'nora', name: 'Nora', color: '#F472B6', since: 'letzter Kontakt im Winter' },
+  { id: 'kai',  name: 'Kai',  color: '#A78BFA', since: 'ihr wolltet mal kochen' },
+];
 
 // clock = Minuten seit 18:00 des Demo-Tags. until = clock-Minute, zu der das Signal abläuft.
 export function seed() {
@@ -76,6 +84,7 @@ export function seed() {
       mara:  { mode: 'unterwegs', energy: 'e2', until: 90 },
       tom:   { mode: null,        energy: null, until: 0 },
     },
+    dormantPinged: [],        // ids aus DORMANT, denen ein Reaktivierungs-Zeichen gesendet wurde
     invisible: {},            // personId -> true (AP4: nicht detektierbar — wirkt wie abgelaufen)
     moments: [
       { id: 'm1', circle: 'gym', title: 'Feierabend-Pump um 18:30?', by: 'lisa', ttlUntil: 90, joined: ['lisa', 'max'], echo: null },
