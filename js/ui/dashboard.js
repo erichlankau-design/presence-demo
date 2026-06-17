@@ -7,6 +7,19 @@ import { icon } from './icons.js';
 
 const modeById = id => MODES.find(m => m.id === id);
 
+// Kollektive Badges — warme Anerkennung des KREISES, nie Personen-Ranking (Audit Kap. 4.7).
+function badgesHTML(circle) {
+  const present = circle.members.filter(id => visiblePresence(id)).length;
+  const badges = [];
+  if (circle.glut >= 75) badges.push('🔥 Heiß gerade');
+  else if (circle.glut >= 40) badges.push('✨ Schön am Glühen');
+  if (present >= Math.ceil(circle.members.length * 0.6)) badges.push('🤍 Oft füreinander da');
+  if (circle.xp / circle.xpNext >= 0.4) badges.push('📖 Kapitel läuft');
+  if (circle.members.length === 2) badges.push('🫶 Eingespieltes Duo');
+  if (!badges.length) return '';
+  return `<div class="badge-row">${badges.map(b => `<span class="badge">${b}</span>`).join('')}</div>`;
+}
+
 // „Hab Zeit – Bock was zu machen?“ — der entstigmatisierte Verfügbarkeits-Status (Audit Kap. 4).
 function habZeitHTML() {
   const open = visiblePresence('me')?.energy === 'e0';
@@ -61,7 +74,8 @@ export function avatarHTML(personId, opts = {}) {
 }
 
 function radarHTML(circle) {
-  const others = circle.members.filter(id => id !== 'me');
+  const blocked = S().blocked || [];
+  const others = circle.members.filter(id => id !== 'me' && !blocked.includes(id));
   const n = others.length;
   // Halbkreis: 200°..340° (oben), Radius nach Anzahl
   const nodes = others.map((id, i) => {
@@ -169,6 +183,7 @@ export function renderDashboard(el) {
           <span class="tiny">${circle.xp}/${circle.xpNext}</span>
         </div>
         <div class="tiny" style="margin-top:6px">XP gibt es nur für gemeinsame Aktionen — niemand wird einzeln gemessen.</div>
+        ${badgesHTML(circle)}
       </div>
     </section>`;
 }

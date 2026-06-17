@@ -85,6 +85,7 @@ export function seed() {
       tom:   { mode: null,        energy: null, until: 0 },
     },
     dormantPinged: [],        // ids aus DORMANT, denen ein Reaktivierungs-Zeichen gesendet wurde
+    blocked: [],              // personIds, die blockiert sind (gegenseitig unsichtbar — Trust/Safety)
     // „Der Funke": tägliches, druckfreies Synchron-Ritual (AP11). active=läuft, until=Fensterende,
     // here=wer „bin da" getippt hat, firedToday=schon ausgelöst (kein Spam), expired=verglüht (folgenlos).
     funke: { active: false, until: 0, here: [], firedToday: false, expired: false },

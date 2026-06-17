@@ -15,19 +15,19 @@
   --card-solid: #1A1E29;
   --card: #1A1E29;
   --card-sheet: #161A24;
-  --card-border: rgba(255, 255, 255, 0.07);
+  --card-border: rgba(255, 255, 255, 0.10);
 
   --accent: #8B7CF6;          /* Primär: Lavendel-Violett */
   --accent-strong: #A496FF;
   --accent-2: #2DD4BF;        /* Sekundär: Petrol (Markenerbe) */
-  --accent-fill: rgba(139, 124, 246, 0.14);
-  --accent-line: rgba(139, 124, 246, 0.34);
+  --accent-fill: rgba(139, 124, 246, 0.20);
+  --accent-line: rgba(139, 124, 246, 0.45);
   --accent2-fill: rgba(45, 212, 191, 0.12);
   --accent2-line: rgba(45, 212, 191, 0.30);
 
   --text-1: #F2F3F7;
-  --text-2: #9AA0B0;
-  --text-3: #6B7184;
+  --text-2: #A6ACBC;
+  --text-3: #8A90A4;   /* AA-Fix: ~4.6:1 auf Card (war #6B7184 ~3.4:1) */
 
   --line: rgba(255, 255, 255, 0.08);
   --fill-1: rgba(255, 255, 255, 0.05);

@@ -9,13 +9,13 @@ import { renderWidget } from './ui/widget.js';
 import { renderOnboarding, onboardingAction, onboardingCopy, onboardingExit } from './ui/onboarding.js';
 import { openPresenceSheet } from './ui/presence.js';
 import { openCirclesSheet } from './ui/circles.js';
-import { openMemberSheet } from './ui/member.js';
+import { openMemberSheet, openBlockSheet } from './ui/member.js';
 import { fireFunke, joinFunke, maybeExpireFunke } from './ui/funke.js';
 import { toast } from './ui/toast.js';
 import { butlerAccept, butlerDismiss } from './butler.js';
 import { startSim, loadScenario, setSpeed, restartScenario } from './sim.js';
 import { icon } from './ui/icons.js';
-import { DORMANT } from './data.js';
+import { DORMANT, PEOPLE } from './data.js';
 
 // Theme: Dark ist Standard (moodier). Hell nur, wenn explizit gewählt & persistiert.
 const savedTheme = (() => { try { return localStorage.getItem('presence-theme'); } catch (e) { return null; } })();
@@ -60,7 +60,8 @@ function computeSig() {
   const c = Object.values(st.circles).map(x => x.id + Math.round(x.glut / 5) + x.xp + x.vault.length).join(',');
   const d = (st.dormantPinged || []).length;
   const f = st.funke.active ? 'F' + st.funke.here.length + (st.funke.until > st.clock ? 'a' : 'x') : '-';
-  return [current, st.meta.activeCircle, st.scenario, st.invisible.me ? 1 : 0, p, m, b, c, d, f].join('|');
+  const bl = (st.blocked || []).join(',');
+  return [current, st.meta.activeCircle, st.scenario, st.invisible.me ? 1 : 0, p, m, b, c, d, f, bl].join('|');
 }
 
 export function nav(name) {
@@ -121,6 +122,21 @@ function setHabZeit() {
   toast('Du hast Zeit — dein Kreis sieht es. Kein Druck, keine Verzweiflung.');
 }
 
+// Trust/Safety-Aktionen: lautlos, ohne Erklärung, sofort wirksam (Block filtert via visiblePresence).
+function doSafety(kind, personId) {
+  const st = S();
+  const name = (PEOPLE[personId] || {}).name || 'Diese Person';
+  document.getElementById('sheet-root').innerHTML = '';
+  if (kind === 'block') {
+    if (!(st.blocked || []).includes(personId)) setS({ blocked: [...(st.blocked || []), personId] });
+    toast(name + ' ist blockiert — für euch beide unsichtbar, lautlos.');
+  } else if (kind === 'mute') {
+    toast(name + ' ist stummgeschaltet — du siehst keine Signale mehr.');
+  } else {
+    toast('Danke. Deine Meldung geht vertraulich an unser Safety-Team.');
+  }
+}
+
 // Reaktivierung: ein Zeichen an einen schlafenden Kontakt, ohne Überwindung.
 function reviveDormant(id) {
   const st = S();
@@ -141,6 +157,10 @@ app.addEventListener('click', e => {
   if (e.target.closest('[data-habzeit]')) return setHabZeit();
   if (e.target.closest('[data-funke-join]')) return joinFunke();
   const revive = find('data-revive');  if (revive) return reviveDormant(revive);
+  const blk = find('data-block');      if (blk) return openBlockSheet(blk);
+  const mute = find('data-do-mute');   if (mute) return doSafety('mute', mute);
+  const rep = find('data-do-report');  if (rep) return doSafety('report', rep);
+  const doblk = find('data-do-block'); if (doblk) return doSafety('block', doblk);
   const ok = find('data-butler-ok');
   if (ok) {
     const m = butlerAccept(ok);

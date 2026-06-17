@@ -238,3 +238,33 @@
 .funke-join { margin-top: 12px; background: linear-gradient(135deg, var(--ember2), var(--ember1)); box-shadow: 0 8px 22px color-mix(in srgb, var(--ember2) 40%, transparent); }
 .funke-joined { margin-top: 12px; padding: 11px; border-radius: 14px; text-align: center; font-weight: 600; font-size: 13.5px; color: var(--ember-text); background: var(--ember-fill); border: 1px solid var(--ember-line); }
 .funke-foot { margin-top: 8px; text-align: center; font-size: 11px; color: var(--text-3); }
+
+/* ---- AP12 Design-Politur: Hero-Radar, Tabbar, Akzente ---- */
+.radar { height: 300px; }
+.radar-halo { height: 200px; }
+.radar-me::after {
+  content: ""; position: absolute; left: 50%; bottom: -10px; transform: translateX(-50%);
+  width: 240px; height: 240px; border-radius: 50%; z-index: -1; pointer-events: none;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 22%, transparent) 0%, transparent 62%);
+  filter: blur(8px);
+}
+#tabbar button { font-size: 11px; }
+#tabbar button .tab-ico .ic { width: 20px; height: 20px; }
+#tabbar button.on { background: var(--accent-fill); }
+.card { border-color: var(--card-border); }
+
+/* ---- Member-Safety-Button (Block/Melden/Stummschalten) ---- */
+.member-safety {
+  width: 100%; margin-top: 12px; padding: 11px; border-radius: 14px;
+  background: transparent; border: 1px solid var(--line);
+  color: var(--text-3); font-size: 12.5px; font-weight: 600;
+}
+.member-safety:active { transform: scale(0.98); }
+
+/* ---- Kollektive Badges (Schulterklopfen, anti-Ranking) ---- */
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 600;
+  background: var(--accent2-fill); border: 1px solid var(--accent2-line); color: var(--text-2);
+}

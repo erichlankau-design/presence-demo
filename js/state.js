@@ -72,6 +72,7 @@ export function reignite(circleId, byName, glutPlus = 12, xpPlus = 20) {
 export function visiblePresence(personId) {
   const p = state.presence[personId];
   if (!p || !p.mode) return null;
+  if ((state.blocked || []).includes(personId)) return null; // blockiert = gegenseitig unsichtbar
   if (state.invisible[personId]) return null;
   if (p.until <= state.clock) return null;
   return p;

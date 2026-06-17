@@ -69,6 +69,7 @@ export function openMemberSheet(personId) {
         Kein Chat hier — fürs Reden habt ihr eure echten Kanäle.<br>
         Mehr als den Moment zeigen wir nicht: Presence kennt kein Gestern.
       </p>
+      <button class="member-safety" data-block="${personId}">Stummschalten · Melden · Blockieren</button>
     </div>`;
 
   root.querySelector('[data-close]').addEventListener('click', closeSheet);
@@ -76,6 +77,40 @@ export function openMemberSheet(personId) {
     const [pid, emoji, label] = b.dataset.signal.split('|');
     sendSignal(pid, emoji, label);
   }));
+  const sb = root.querySelector('[data-block]');
+  if (sb) sb.addEventListener('click', () => openBlockSheet(sb.dataset.block));
+}
+
+// Trust/Safety: Stummschalten · Melden · Blockieren (App-Store-Pflicht für UGC; zentrales Vertrauensargument)
+export function openBlockSheet(personId) {
+  const root = document.getElementById('sheet-root');
+  const p = PEOPLE[personId];
+  root.innerHTML = `
+    <div class="sheet-backdrop" data-close></div>
+    <div class="sheet">
+      <div class="h-display h2" style="margin-bottom:2px">${p.name}</div>
+      <div class="tiny" style="margin-bottom:12px">Deine Grenze, deine Entscheidung — leise und ohne Erklärung.</div>
+      <button class="signal-btn" data-do-mute="${personId}"><span class="se">🔕</span><span class="grow">Stummschalten<span class="sub">Du siehst ${p.name} weiter, aber ohne Signale</span></span></button>
+      <button class="signal-btn" data-do-report="${personId}"><span class="se">⚑</span><span class="grow">Melden<span class="sub">Geht vertraulich an unser Safety-Team</span></span></button>
+      <button class="signal-btn dim" data-do-block="${personId}"><span class="se">⛔</span><span class="grow">Blockieren<span class="sub">${p.name} verschwindet für dich — gegenseitig, lautlos</span></span></button>
+      <button class="btn ghost" data-close style="margin-top:12px">Abbrechen</button>
+    </div>`;
+  root.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', closeSheet));
+  const act = (kind) => {
+    const st = S();
+    closeSheet();
+    if (kind === 'block') {
+      if (!(st.blocked || []).includes(personId)) setS({ blocked: [...(st.blocked || []), personId] });
+      toast(p.name + ' ist blockiert — für euch beide unsichtbar, lautlos.');
+    } else if (kind === 'mute') {
+      toast(p.name + ' ist stummgeschaltet — du siehst keine Signale mehr.');
+    } else {
+      toast('Danke. Deine Meldung geht vertraulich an unser Safety-Team.');
+    }
+  };
+  root.querySelector('[data-do-mute]').addEventListener('click', () => act('mute'));
+  root.querySelector('[data-do-report]').addEventListener('click', () => act('report'));
+  root.querySelector('[data-do-block]').addEventListener('click', () => act('block'));
 }
 
 export function sendSignal(personId, emoji, label) {
